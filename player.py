@@ -1,12 +1,13 @@
 import pygame 
 
 class Player():
-    def __init__(self, surface, clock, width, height, color):
+    def __init__(self, surface, clock, width, height, color=None, sprite=None):
         self.Surface = surface
         self.Clock = clock
         self.Width  = width
         self.Height = height
         self.Color = color
+        self.Spirte = sprite
         self.X = 400.0
         self.Y = 150.0
         self.fallingConstant = 90
@@ -24,6 +25,7 @@ class Player():
 
     def draw(self):
         pygame.draw.rect(self.Surface, self.Color, (self.X, self.Y, self.Width, self.Height))
+            
 
     def update(self, timedelta, jump):
         if jump:
@@ -32,6 +34,7 @@ class Player():
         self.vertSpeed -= self.fallingConstant * timedelta
 
     def gameover(self):
-        pass
+        self.fallingConstant = 0
+        self.jumpSpeed = 0
 
 

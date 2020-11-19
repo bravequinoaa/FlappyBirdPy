@@ -1,16 +1,20 @@
 import pygame
 
 class Tower:
-    def __init__(self, surface, clock, width, height, color):
+    # Need to initialized outside play area and move left
+    def __init__(self, surface, clock, height, X, Y,  color):
         self.Surface = surface
         self.Clock = clock
-        self.Width  = width
+        self.Width  = 100
         self.Height = height
+        self.X = X
+        self.Y = Y
         self.Color = color
+        self.mspeed = 7 
+    
+    def draw(self):
+        pygame.draw.rect(self.Surface, self.Color, (self.X, self.Y, self.Width, self.Height))
 
-        #Pos
-        self.X1 = 400.0
-        self.Y1 = 150.0
-        self.X2 = 400.0
-        self.Y2 = 150.0
+    def update(self):
+        self.X -= self.mspeed
     
