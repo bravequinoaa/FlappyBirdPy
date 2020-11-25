@@ -16,7 +16,7 @@ RUNNING_TIME = 0
 TOWER_COUNTDOWN = TOWER_RESPAWN = 180
 
 playersprite = pygame.image.load("sprites/flappybutt.jpg")
-towersprite= "sprites/"
+towersprite = "sprites/"
 
 # COLORS
 black = pygame.Color('#000000')
@@ -48,7 +48,8 @@ def checkLost():
         player.gameover()
 
 def GameOver():
-    ACTIVE = False 
+    global ACTIVE 
+    ACTIVE = False
 
 def createTower():
     print(f'TOWERS SIZE: {len(towers)}')
