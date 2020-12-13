@@ -10,9 +10,9 @@ class Player():
         self.Spirte = sprite
         self.X = 400.0
         self.Y = 150.0
-        self.fallingConstant = 90
+        self.fallingConstant = 135
         self.vertSpeed = 0
-        self.jumpSpeed = 140
+        self.jumpSpeed = 180
 
     def getY(self):
         return self.Y

@@ -3,17 +3,19 @@ from random import randint
 from player import Player
 from tower import Tower
 
-DEBUG = False 
+DEBUG = True 
 ACTIVE = True 
 
 WIN_WIDTH = 1200 
 WIN_HEIGHT = 700
-PLAYER_WIDTH = 70
-PLAYER_HEIGHT = 70
+PLAYER_WIDTH = 50
+PLAYER_HEIGHT = 50 
 FRAMERATE = 60
 SCORE = 0
 RUNNING_TIME = 0
 TOWER_COUNTDOWN = TOWER_RESPAWN = 180
+FIRST_TOWER = 300
+
 
 playersprite = pygame.image.load("sprites/flappybutt.jpg")
 towersprite = "sprites/"
@@ -52,21 +54,22 @@ def GameOver():
     ACTIVE = False
 
 def createTower():
-    print(f'TOWERS SIZE: {len(towers)}')
-    Y = randint(0, 600)
-    print(Y)
+    Y = randint(000, 500)
     tower = Tower(background, clock, 1000, WIN_WIDTH, WIN_HEIGHT - Y, black)
     towers.append(tower)
 
-def updateTower():
+def updateTowers():
     for tower in towers:
         tower.update()
+
+def drawTowers():
+    for tower in towers:
         tower.draw()
 
 def destroyTower():
     t = towers[0]
-    if t.X <= 0:
-        towers.pop(0)
+    towers.pop(0)
+
     
 if __name__ == "__main__":
     createTower()
@@ -76,8 +79,9 @@ if __name__ == "__main__":
         RUNNING_TIME += time_delta
 
         if DEBUG:
-            pygame.draw.rect(background, black, (0, 0, 100, 100))
-            print(str(round(RUNNING_TIME, 3)))
+            #pygame.draw.rect(background, black, (0, 0, 100, 100))
+            #print(str(round(RUNNING_TIME, 3)))
+            pass
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -98,13 +102,16 @@ if __name__ == "__main__":
             createTower()
 
         player.update(time_delta, jumping)
-        updateTower()
-        #tower1.update()
+        updateTowers()
+        tower1.update()
         checkLost()
 
         # DRAW
         background.fill(sky)
+        drawTowers()
         player.draw()
+        drawTowers()
+
 
         Game_Window.blit(background, (0,0))
         Game_Window.blit(scoretext, (0,0))

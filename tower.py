@@ -10,7 +10,7 @@ class Tower:
         self.X = X
         self.Y = Y
         self.Color = color
-        self.mspeed = 7 
+        self.mspeed = 5 
     
     def draw(self):
         pygame.draw.rect(self.Surface, self.Color, (self.X, self.Y, self.Width, self.Height))
@@ -18,3 +18,5 @@ class Tower:
     def update(self):
         self.X -= self.mspeed
     
+    def __str__(self):
+        return f'(X: {self.Y} Y: {self.Y}'
