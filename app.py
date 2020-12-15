@@ -13,7 +13,7 @@ PLAYER_HEIGHT = 50
 FRAMERATE = 60
 SCORE = 0
 RUNNING_TIME = 0
-TOWER_COUNTDOWN = TOWER_RESPAWN = 180
+TOWER_COUNTDOWN = TOWER_RESPAWN = 140
 FIRST_TOWER = 300
 
 
@@ -45,9 +45,23 @@ tower1 = Tower(background, clock, 1000, WIN_WIDTH, WIN_HEIGHT - 80, black)
 towers = []
 
 def checkLost():
-    if player.getBotY() >= WIN_HEIGHT or player.getY()  <= 0:
+    if (player.getBotY() >= WIN_HEIGHT or player.getY()  <= 0):
         GameOver()
         player.gameover()
+        pass
+
+    collision = player.getCollision()
+    if DEBUG:
+        print(collision)
+    for tower in towers:
+        # need to fix to work with a tuple of towers
+        towerPos = tower.getPosition()
+        if (collision[0] >= towerPos[0] and collision[1] >= towerPos[1]) and (
+            collision[0] <= towerPos[0] + tower.getWidth() and 
+             collision[1] <= towerPos[1] + tower.getHeight()):
+             GameOver()
+             player.gameover()
+
 
 def GameOver():
     global ACTIVE 
@@ -55,8 +69,9 @@ def GameOver():
 
 def createTower():
     Y = randint(000, 500)
-    tower = Tower(background, clock, 1000, WIN_WIDTH, WIN_HEIGHT - Y, black)
-    towers.append(tower)
+    towerBot = Tower(background, clock, 1000, WIN_WIDTH, WIN_HEIGHT - Y, black)
+    #towerTop = Tower(background, clock, , WIN_WIDTH, 0
+    towers.append(towerBot)
 
 def updateTowers():
     for tower in towers:
@@ -90,7 +105,7 @@ if __name__ == "__main__":
                 if event.key == pygame.K_SPACE:
                     SCORE += 1
                     jumping = True
-                    print(ACTIVE)
+                    #print(ACTIVE)
         # TEXT
         scoretext = font.render(f'SCORE: {SCORE}', True, (0, 0, 0))
         timetext = font.render(f'TIME: {str(round(RUNNING_TIME, 3))}', True, (0, 0, 0))

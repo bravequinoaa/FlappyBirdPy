@@ -10,7 +10,16 @@ class Tower:
         self.X = X
         self.Y = Y
         self.Color = color
-        self.mspeed = 5 
+        self.mspeed = 6 
+
+    def getHeight(self):
+        return self.Height
+
+    def getWidth(self):
+        return self.Width
+
+    def getPosition(self):
+        return (self.X, self.Y)
     
     def draw(self):
         pygame.draw.rect(self.Surface, self.Color, (self.X, self.Y, self.Width, self.Height))
