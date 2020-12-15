@@ -59,16 +59,22 @@ def checkLost():
         # need to fix to work with a tuple of towers
         tower1Pos = tower[0].getPosition()
         tower2Pos = tower[1].getPosition()
-        if ((collisionBot[0] > tower1Pos[0] and collisionBot[1] >= tower1Pos[1]) and (
+        if ((collisionBot[0] > tower1Pos[0] and collisionBot[1] > tower1Pos[1]) and (
              collisionBot[0] < tower1Pos[0] + tower[0].getWidth() and 
              collisionBot[1] < tower1Pos[1] + tower[0].getHeight())) or (
-             collisionTop[0] > tower2Pos[0] and collisionTop[1] >= tower2Pos[1]) and (
-             collisionTop[0] < tower2Pos[0] + tower[1].getWidth() and
-             collisionTop[1] < tower2Pos[1] + tower[1].getHeight()):
-             print("collision detected")
-             GameOver()
-             player.gameover()
-
+             collisionTop[0] < tower2Pos[0] and collisionTop[1] < tower2Pos[1]) and (
+             collisionTop[0] > tower2Pos[0] + tower[1].getWidth() and
+             collisionTop[1] > tower2Pos[1] + tower[1].getHeight()):
+            print(f'CollisionBot: {collisionBot}')
+            print(f'CollisionTop: {collisionTop}')
+            print()
+            print(f'Tower1Pos: {tower1Pos}')
+            print(f'Tower2Pos: {tower2Pos}')
+            print(f'Tower2bot: ({tower2Pos[0] + tower[1].getWidth()}, {tower2Pos[1] + tower[1].getHeight()})')
+             
+            print("collision detected")
+            GameOver()
+            player.gameover()
 
 def GameOver():
     global ACTIVE 
@@ -94,7 +100,11 @@ def destroyTower():
     t = towers[0]
     towers.pop(0)
 
-    
+def checkScored():
+    global SCORE
+    if player.X > towers[0][0].getX()+towers[0][0].getWidth():
+        SCORE+=1
+
 if __name__ == "__main__":
     createTower()
     while ACTIVE:
@@ -112,9 +122,7 @@ if __name__ == "__main__":
                 ACTIVE = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    SCORE += 1
                     jumping = True
-                    #print(ACTIVE)
         # TEXT
         scoretext = font.render(f'SCORE: {SCORE}', True, (0, 0, 0))
         timetext = font.render(f'TIME: {str(round(RUNNING_TIME, 3))}', True, (0, 0, 0))
@@ -129,6 +137,8 @@ if __name__ == "__main__":
         updateTowers()
         tower1.update()
         checkLost()
+        checkScored()
+
 
         # DRAW
         background.fill(sky)

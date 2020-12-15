@@ -21,6 +21,9 @@ class Tower:
     def getY(self):
         return self.Y
 
+    def getX(self):
+        return self.X
+
     def getPosition(self):
         return (self.X, self.Y)
     
