@@ -3,7 +3,7 @@ from random import randint
 from player import Player
 from tower import Tower
 
-DEBUG = True 
+DEBUG = False 
 ACTIVE = True 
 
 WIN_WIDTH = 1200 
@@ -50,15 +50,22 @@ def checkLost():
         player.gameover()
         pass
 
-    collision = player.getCollision()
+    collisionBot = player.getCollisionBot()
+    collisionTop = player.getCollisionTop()
     if DEBUG:
-        print(collision)
+        print(f'CollisionBot: {collisionBot}')
+        print(f'CollisionTop: {collisionTop}')
     for tower in towers:
         # need to fix to work with a tuple of towers
-        towerPos = tower.getPosition()
-        if (collision[0] >= towerPos[0] and collision[1] >= towerPos[1]) and (
-            collision[0] <= towerPos[0] + tower.getWidth() and 
-             collision[1] <= towerPos[1] + tower.getHeight()):
+        tower1Pos = tower[0].getPosition()
+        tower2Pos = tower[1].getPosition()
+        if ((collisionBot[0] > tower1Pos[0] and collisionBot[1] >= tower1Pos[1]) and (
+             collisionBot[0] < tower1Pos[0] + tower[0].getWidth() and 
+             collisionBot[1] < tower1Pos[1] + tower[0].getHeight())) or (
+             collisionTop[0] > tower2Pos[0] and collisionTop[1] >= tower2Pos[1]) and (
+             collisionTop[0] < tower2Pos[0] + tower[1].getWidth() and
+             collisionTop[1] < tower2Pos[1] + tower[1].getHeight()):
+             print("collision detected")
              GameOver()
              player.gameover()
 
@@ -70,16 +77,18 @@ def GameOver():
 def createTower():
     Y = randint(000, 500)
     towerBot = Tower(background, clock, 1000, WIN_WIDTH, WIN_HEIGHT - Y, black)
-    #towerTop = Tower(background, clock, , WIN_WIDTH, 0
-    towers.append(towerBot)
+    towerTop = Tower(background, clock, towerBot.getY() - 200, WIN_WIDTH, 0, black)
+    towers.append((towerBot, towerTop))
 
 def updateTowers():
     for tower in towers:
-        tower.update()
+        tower[0].update()
+        tower[1].update()
 
 def drawTowers():
     for tower in towers:
-        tower.draw()
+        tower[0].draw()
+        tower[1].draw()
 
 def destroyTower():
     t = towers[0]
@@ -127,11 +136,9 @@ if __name__ == "__main__":
         player.draw()
         drawTowers()
 
-
         Game_Window.blit(background, (0,0))
         Game_Window.blit(scoretext, (0,0))
         Game_Window.blit(timetext, (0,20))
-        
 
         pygame.display.update()
     

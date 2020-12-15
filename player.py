@@ -10,9 +10,9 @@ class Player():
         self.Spirte = sprite
         self.X = 400.0
         self.Y = 150.0
-        self.collisionX = self.X + self.Width
-        self.collisionY = self.Y + self.Height
-        self.fallingConstant = 135
+        self.collisionBot = (self.X + self.Width, self.Y + self.Height)
+        self.collisionTop = (self.X + self.Width, self.Y)
+        self.fallingConstant = 170
         self.vertSpeed = 0
         self.jumpSpeed = 180
 
@@ -25,8 +25,11 @@ class Player():
     def getBotY(self):
         return self.Y + self.Height
 
-    def getCollision(self):
-        return (self.collisionX, self.collisionY)
+    def getCollisionBot(self):
+        return self.collisionBot
+
+    def getCollisionTop(self):
+        return self.collisionTop
 
     def draw(self):
         pygame.draw.rect(self.Surface, self.Color, (self.X, self.Y, self.Width, self.Height))

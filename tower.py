@@ -10,13 +10,16 @@ class Tower:
         self.X = X
         self.Y = Y
         self.Color = color
-        self.mspeed = 6 
+        self.mspeed = 5 
 
     def getHeight(self):
         return self.Height
 
     def getWidth(self):
         return self.Width
+
+    def getY(self):
+        return self.Y
 
     def getPosition(self):
         return (self.X, self.Y)
