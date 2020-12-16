@@ -23,6 +23,9 @@ class Tower:
 
     def getX(self):
         return self.X
+        
+    def getSize(self):
+        return (self.Width, self.Height)
 
     def getPosition(self):
         return (self.X, self.Y)

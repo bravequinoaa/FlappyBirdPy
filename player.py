@@ -39,8 +39,8 @@ class Player():
             self.vertSpeed = self.jumpSpeed
         self.Y -= self.vertSpeed * timedelta
         self.vertSpeed -= self.fallingConstant * timedelta
-        self.collisionX = self.X + self.Width
-        self.collisionY = self.Y + self.Height
+        self.collisionBot = (self.X + self.Width, self.Y + self.Height)
+        self.collisionTop = (self.X + self.Width, self.Y)
 
     def gameover(self):
         self.fallingConstant = 0

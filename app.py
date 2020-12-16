@@ -52,27 +52,12 @@ def checkLost():
 
     collisionBot = player.getCollisionBot()
     collisionTop = player.getCollisionTop()
-    if DEBUG:
-        print(f'CollisionBot: {collisionBot}')
-        print(f'CollisionTop: {collisionTop}')
     for tower in towers:
-        # need to fix to work with a tuple of towers
-        tower1Pos = tower[0].getPosition()
-        tower2Pos = tower[1].getPosition()
-        if ((collisionBot[0] > tower1Pos[0] and collisionBot[1] > tower1Pos[1]) and (
-             collisionBot[0] < tower1Pos[0] + tower[0].getWidth() and 
-             collisionBot[1] < tower1Pos[1] + tower[0].getHeight())) or (
-             collisionTop[0] < tower2Pos[0] and collisionTop[1] < tower2Pos[1]) and (
-             collisionTop[0] > tower2Pos[0] + tower[1].getWidth() and
-             collisionTop[1] > tower2Pos[1] + tower[1].getHeight()):
-            print(f'CollisionBot: {collisionBot}')
-            print(f'CollisionTop: {collisionTop}')
-            print()
-            print(f'Tower1Pos: {tower1Pos}')
-            print(f'Tower2Pos: {tower2Pos}')
-            print(f'Tower2bot: ({tower2Pos[0] + tower[1].getWidth()}, {tower2Pos[1] + tower[1].getHeight()})')
-             
-            print("collision detected")
+        towerBotSize = tower[0].getSize()
+        towerBotPos = tower[0].getPosition()
+        towerTopSize = tower[1].getSize()
+        towerTopPos = tower[1].getPosition()
+        if (checkCollision(collisionBot, collisionTop, towerBotPos, towerTopPos, towerBotSize, towerTopSize)):
             GameOver()
             player.gameover()
 
@@ -81,6 +66,7 @@ def GameOver():
     ACTIVE = False
 
 def createTower():
+    print(len(towers))
     Y = randint(000, 500)
     towerBot = Tower(background, clock, 1000, WIN_WIDTH, WIN_HEIGHT - Y, black)
     towerTop = Tower(background, clock, towerBot.getY() - 200, WIN_WIDTH, 0, black)
@@ -104,6 +90,34 @@ def checkScored():
     global SCORE
     if player.X > towers[0][0].getX()+towers[0][0].getWidth():
         SCORE+=1
+
+def checkCollision(collisionBot, collisionTop, towerBotPos, towerTopPos, towerBotSize, towerTopSize):
+    if DEBUG:
+        print(f'CollisionBot: {collisionBot}')
+        print(f'CollisionTop: {collisionTop}')
+        print()
+        print(f'TowerBotPos: {towerBotPos}')
+        print(f'TowerTopPos: {towerTopPos}')
+        print("Collision Check:\t", (collisionBot[0] > towerBotPos[0] and collisionBot[0] < towerBotPos[0] + towerBotSize[0]) and (
+                collisionBot[1] > towerBotPos[1])) or (
+                (collisionTop[0] > towerTopPos[0] + towerTopSize[0] or collisionTop[0] < towerTopPos[1]) and (
+                collisionTop[1] < towerTopPos[0] + towerTopSize[1]))
+        print("Bot Collision:\t", (collisionBot[0] > towerBotPos[0] and collisionBot[0] < towerBotPos[0] + towerBotSize[0]) and (
+                collisionBot[1] > towerBotPos[1]))
+        print("Top Collision:\t", ((collisionTop[0] > towerTopPos[1] or collisionTop[0] < towerTopPos[0] + towerTopSize[0]) and (
+               collisionTop[1] < towerTopPos[0] + towerTopSize[1])))                                          
+        print(collisionTop[0] < towerTopPos[0] + towerTopSize[0] or collisionTop[0] > towerTopPos[1])
+        print(collisionTop[1] < towerTopPos[0] + towerTopSize[1])
+        spacing()
+
+
+    # returns bottom OR top collision result
+    return ((collisionBot[0] > towerBotPos[0] and collisionBot[0] < towerBotPos[0] + towerBotSize[0]) and (
+                collisionBot[1] > towerBotPos[1])) or (
+                ((collisionTop[0] > towerTopPos[0] + towerTopSize[0] or collisionTop[0] < towerTopPos[1]) and (
+                collisionTop[1] < towerTopPos[0] + towerTopSize[1])))
+def spacing():
+    print("=========================")
 
 if __name__ == "__main__":
     createTower()
@@ -133,12 +147,12 @@ if __name__ == "__main__":
             TOWER_RESPAWN = TOWER_COUNTDOWN
             createTower()
 
+        # UPDATE
         player.update(time_delta, jumping)
         updateTowers()
         tower1.update()
         checkLost()
         checkScored()
-
 
         # DRAW
         background.fill(sky)
